@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+
+{% block script %}
+
+<script>
+$(document).ready(function(){
+
+$(".categories").click(function(){
+var abc = $(this).closest(".categories").attr("id");
+{% for i in to_send %}
+var temp = '{{ i }}'
+console.log("[id='"+temp+'_toshow'+"']")
+
+$("[id='"+temp+'_toshow'+"']").hide();
+
+{% endfor %}
+
+{% for i in to_send %}
+ 
+var temp = '{{ i }}'
+console.log(temp,abc)
+$("[id='"+abc+'_toshow'+"']").show();
+
+{% endfor %}
+
+});
+
+
+});
+
+</script>
+
+{% endblock script %}
+
+
+{% block contents %}
+
+<div class="container-fluid">    
+  <div class="row content ">
+    <div class="col-sm-2 sidenav">
+    	<h2>Categories</h2>
+          <ul class="nav nav-pills nav-stacked"> 
+	{% for i in to_send %}
+             <li><a href="#" class = "categories" id = "{{ i }}"><h4>{{ i }}</h4></a></a></li>
+      {% endfor %}
+      </div>
+      <br>
+<div class ="container"> 
+  <h2><b>Instructions</b></h2>
+  <ul>
+    <li>
+      <p><h4>Each quiz contains 5 questions and each question corresponds to 10 points.</h4></p>
+    </li>
+    <li>
+      <p><h4>There are both single and multiple answer questions written under every questions.</h4></p>
+    </li>
+    <li>
+      <p><h4>There is lifeline option available once per quiz.In single correct option you get 50-50 as lifeline and in multiple correct you get one answer.</h4></p>
+    </li>
+    <li>
+      <p><h4>There are two options available one for pausing the quiz and for submitting the quiz.Once submitted you cannot resubmit the quiz.But you can pause the quiz anytime in between and again start from the same question.</h4></p>
+    </li>
+  </ul>
+</div><br><br>
+<div class="container">
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th style="font-size: 1.3vw">Quiz</th>
+        <th style="font-size: 1.3vw">Sub-Category</th>
+        <th style="font-size: 1.3vw">State</th>
+        <th style="font-size: 1.3vw">Score</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for i in to_send %}
+     {% for j in to_send[i] %}
+       {% for k in  to_send[i][j] %}
+      <tr class= "{{ i }}" id="{{ i }}_toshow">
+        <td style="font-size: 1vw">{{ k }}</td>
+        <td style="font-size: 1vw">{{ j }}</td>
+        <td style="font-size: 1vw">{% if attempt[k.id] == 2 %} Attempted {% elif attempt[k.id] == 1%} Paused {% elif attempt[k.id] == 0 %} Not Attempted {% endif %}</td>
+        <td style="font-size: 1vw">{{ to_send[i][j][k][0] }}/{{ total_score[k.id][0] }}</td>
+        <td style="font-size: 1vw"><a href='/quiz/{{ k.id }}/1'"><button class="btn btn-success">Start/Resume</button></a></td>
+
+      </tr>
+    </tbody>
+    {% endfor %}
+    {% endfor %}
+    {% endfor %}
+    
+    
+  </table>
+
+</div>
+</div>
+</div>
+<div id="footer">© 2018 Copyright QZone</footer>
+{% endblock %}

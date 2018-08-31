@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block script %}
+	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load("current", {packages:["corechart"]});
+      google.charts.setOnLoadCallback(drawChart);
+      function drawChart() {
+        console.log({{ notattempted }})
+        console.log({{ incorrect }})
+        console.log({{ correct }})
+
+        var data = google.visualization.arrayToDataTable([
+          ['Total', 'Count'],
+          ['Not-Attempted',{{ notattempted }}],
+          ['Correct',      {{ correct }}],
+          ['Incorrect',  {{ incorrect }}],
+       ]);
+
+        var options = {
+
+          is3D: true,
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart_3d'));
+        chart.draw(data, options);
+      }
+    </script>
+{% endblock script %}
+{% block contents %}
+  <div>
+    <br>
+  <h1 style="margin-left:8.7vw "><b> Performance Analysis</b> </h1>
+  </div>
+
+	<div id="piechart_3d" style="width: 900px; height: 500px;"></div>
+  <div style="margin-left:8.7vw">
+    <h4> No of Total Questions: {{ correct + incorrect + notattempted }} </h4>
+    <h4> No of Correct Answers: {{ correct }} </h4>
+    <h4> No of Incorrect Answers: {{ incorrect  }} </h4>
+    <h4> No of Not-Attempted Questions: {{  notattempted }} </h4> 
+
+  </div>
+
+  <div id="footer">© 2018 Copyright QZone</footer>
+{% endblock %}

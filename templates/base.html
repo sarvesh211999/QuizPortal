@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+  	<meta charset="utf-8">
+  	<title>QZone</title>
+  	<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    
+    <link rel="stylesheet" type= text/css href="{{url_for('static',filename='style.css')}}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
+	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+	
+
+	<script>
+	$(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip();   
+	});
+	</script>
+	{% block script %}
+	{% endblock script %}
+
+  </head>
+
+<body>
+	<div class = "w3-top">	
+	<nav class="navbar navbar-inverse">
+		<div class="container-fluid">
+		<!--LOgo-->
+			<div class="navbar-header">
+				<a href="#" data-toggle="tooltip" title="QZone" class="navbar-brand">QZone</a>
+			</div>
+
+		<!--Menu Items-->
+			<div>
+				<ul class="nav navbar-nav">
+
+					<li id="home"><a href="{{ url_for ('home') }}" data-toggle="tooltip" title="Home" style="font-family:'Helvetica Neue',Helvetica,Arial,sans-serif !important">Home</a></li>
+					<li id="dashboard"><a href="{{ url_for('quiz_dashboard') }}" data-toggle="tooltip" title="Dashboard" style="font-family:'Helvetica Neue',Helvetica,Arial,sans-serif !important">Dashboard</a></li>
+					{% if adminflag %}<li><a href="/admin" data-toggle="tooltip" title="Admin Panel" >Admin Panel</a></li>{% endif %}
+				</ul>
+				<ul class ="nav navbar-nav navbar-right">
+					{% if signinupflag %}<li {{ index_active }}><a href="{{ url_for ('login') }}"><span class="glyphicon glyphicon-user"></span> Sign In / Sign Up</a></li>{% else %}
+					<li><a href="/home#leaderboard"><span class="glyphicon glyphicon-tasks"></span> Leaderboard</a></li>
+					<li><a href="/profile"><span class="glyphicon glyphicon-user"></span> My Profile</a></li>
+					<li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+					{% endif %}
+				</ul>		
+			</div>
+		</div>
+	</nav>
+	</div>
+	
+	{% block contents %}
+	{% endblock %}
+
+	
+   
+</body>

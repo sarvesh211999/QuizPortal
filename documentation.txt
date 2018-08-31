@@ -1,0 +1,84 @@
+INTRODUCTION
+
+QZone ia a very simple, enhanced and fascinating responsive quiz portal, with flexible features user can enjoy with ease. It provides user to evaluate his level of knowledge in various categories and help analyse his performance through pie-charts and scores.
+
+It also has a very effective interface for for admin-section.
+
+About Us
+
+This project is created by Sarvesh Mehta and Ayush Shivani as a part of ITWS-II final project on the topic "Quiz Portal", under the mentorship of Hasrshil Mahajan.
+
+# Welcome to QZone!
+
+## Code
+
+These are the directories that we are actively using in the development:
+
+quiz.py => contains the logic 
+
+templates => Templates used to generate the HTML that is deployed to the user
+
+## About the site
+
+This quizing application is a simple but quite organized quizing portal where quizes are divided by various "Categories" which are further divided by "Sub-Categories".Each subcategory may contain more than one quiz.
+
+The overall application contains two section:
+
+1) ADMIN SECTION 
+
+This section contains all the features that a admin may require to run this site.It has been made such that the admin can control the site effectively and without changing anything in the source code.It contains following features:
+	
+[a] can insert,delete,update problems,quizes,sub-category,categories,user etc directly from UI
+[b] can see all the feedback messages sent by the visitors directly
+
+
+2) USER SECTION
+
+This section contains features a user aspire in an application.There has been many basic as well complex functionalities provided to the user to enhance his/her experience.It contains following features:
+
+ [a] can login/signup normally as well as through Google.
+ [b] can gives quizes of a particular subject as categories are further divided into sub-categories.
+ [c] contains single as well as multiple choice questions.
+ [d] can know his/her score in a particular quiz as well as state of the quiz in which the user left it(paused quiz/submitted/not-attempted).   
+ [e] other common functions such as changing password etc.
+
+
+SOME ADDITIONS FEATURES
+
+=> can use Google SignIn login 
+	URL for reference -- https://pythonspot.com/login-to-flask-app-with-google/
+
+	For Google SignIn OAuth 2.0 is used
+	First a client-id and client-secret was generated when registering the app on Google (google developers console)
+	Model is created 
+		[a] client-id client-secret is defined
+		[b] redirect url is which is set in google developers console
+		[c] auth url is where user is taken for signin
+		[d] token url is where exchange of token takes place (access_token is received)
+		[e] user info url from where information about user is extracted in json format	
+	a function get_auth() is created that help to obtain OAuth session object that is used in google callback function and login (state and token are passed as parameter)
+		[a] if state is provided token is required 
+		[b] if token is provided access_token is required
+	in the google callback url 
+		[a] check for user login and check for if any error
+		[b] check for state and token parameter in url so that user cannot try to access url directly
+		[c] after all above we create a OAuth session object by passing state as paramter and then it is used to fetch the access token from google 		
+		[d] then the response from google is extracted in json format and then the details are retrieved as per the requirement for ex here (name and email)
+		[e] the retrieved information is then added to the database
+	
+		
+=> gets lifeline in each quiz (50-50 if single answer question and gets one correct answer if multiple answer question)
+=> every quiz analysis through Pie-Charts.
+	google analytics Pie-Charts is used
+=> forgot password functionality is implemented
+	used smtp libraray for sending mail
+	
+
+PROBLEMS FACED:
+
+=> In Google Sign In (if url localhost:5000/login is used then google signin was not working)
+	this is because in google developers console and in models.py 127.0.0.1 is defined
+=> One problem was to check answer without redirecting it to another url 
+	for that jquery + ajax was used that take the input from user and then forward it to an app route return json object from app route.
+	jquery + ajax was also used in change password, submit feedback
+=> There were many small problems in every step but were solvable and that doesnt required learning of any new concept or technique 

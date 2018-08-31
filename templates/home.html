@@ -1,0 +1,197 @@
+<!-- <!DOCTYPE html>
+<html> -->
+<!-- <meta charset="UTF-8"> -->
+{% extends 'base.html' %}
+{% block script %}
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inconsolata">
+<meta charset="utf-8">
+<title>QZone</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" type= text/css href="{{url_for('static',filename='style.css')}}">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
+ <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script>
+
+// Tabbed Menu
+function openMenu(evt, menuName) {
+  var i, x, tablinks;
+  x = document.getElementsByClassName("menu");
+  for (i = 0; i < x.length; i++) {
+     x[i].style.display = "none";
+  }
+  tablinks = document.getElementsByClassName("tablink");
+  for (i = 0; i < x.length; i++) {
+     tablinks[i].className = tablinks[i].className.replace(" w3-dark-grey", "");
+  }
+  document.getElementById(menuName).style.display = "block";
+  evt.currentTarget.firstElementChild.className += " w3-dark-grey";
+}
+
+</script>
+<script type="text/javascript">
+  $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+  $(document).ready(function(){
+      $(document).ready(feedback);
+
+      function feedback(){
+          $(".msg-send").click(function(event) {
+            var url = $SCRIPT_ROOT + '/feedback';
+            var name = $("#feed_name").val();
+            var email = $("#feed_email").val();
+            var msg = $("#feed_msg").val();
+            $.getJSON(url,
+            {
+              name:name,
+              email:email,
+              msg:msg
+            });
+
+            $('.showres').html('Your Response Has Been recorded')
+
+          });
+
+      }
+  });
+</script>
+<style>
+body, html {
+    height: 100%;
+    font-family: "Inconsolata", sans-serif;
+}
+
+.bgimg {
+    background-position: center;
+    background-size: cover;
+    background-image: url("./static/index.jpg");
+    min-height: 75%;
+}
+.menu {
+    display: none;
+}
+.navbar{
+  min-height: 4vw;
+    
+}
+
+.navbar-brand{
+  height : 3vw;
+  font-size: 4vw;
+  line-height: 3vw;
+
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    /*padding-top: 35px;*/
+}
+
+.navbar-nav > li > a {
+  line-height: 3vw;
+  font-size: 1vw !important;
+  flex-direction: row !important;
+
+} 
+</style>
+{% endblock %}
+<body>
+
+<!-- Links (sit on top) -->
+{% block contents %}
+<!-- Header with image -->
+<header class="bgimg w3-display-container w3-grayscale-min" id="home">
+  <div class="w3-display-middle w3-center">
+    <span class="w3-text-white" style="font-size:90px">Welcome to QZone </span>
+  </div>
+</header>
+
+<!-- Add a background color and large text to the whole page -->
+<div class="w3-sand w3-grayscale w3-large">
+
+<!-- About Container -->
+<div class="w3-container" id="about">
+  <div class="w3-content" style="max-width:700px">
+    <h3 class="w3-center w3-padding-64"><span class="w3-tag w3-wide">ABOUT THE SITE</span></h3>
+    <p>QZone is a very simple, enhanced and fascinating responsive quiz portal, with flexible features user can enjoy with ease. It provides user to evaluate his level of knowledge in various categories.The categories are further divided into sub-categories for flexibility of user's interest. It uses Pie-Chart to evaluate uses's performance.</p>
+    <p>It also has a very effective interface for admin-section in which problems,quizes,categories etc can be added quite easily.</p>
+    <p>This project is created by Sarvesh Mehta and Ayush Shivani as a part of ITWS-II course.</p>
+    <div class="w3-panel w3-leftbar w3-light-grey">
+      <p><i>"Unlocking knowledge at the speed of thought"</i></p>
+    </div>
+  </div>
+</div>
+<br><br>
+
+<!-- Menu Container -->
+<div class="w3-container" id="menu">
+  <div class="w3-content" style="max-width:700px">
+  
+    <div class="w3-row w3-center w3-card w3-padding">
+      <a href="javascript:void(0)" onclick="openMenu(event, 'Quizes');" id="myLink">
+        <div class="w3-col s6 tablink">Quizes</div>
+      </a>
+      <a href="javascript:void(0)" onclick="openMenu(event, 'Leaderboard');">
+        <div class="w3-col s6 tablink" id="leaderboard">Leaderboard</div>
+      </a>
+    </div>
+    <div id="Quizes" class="w3-container menu w3-padding-48 w3-card">
+    {% for i in to_send %}
+      <h3>{{ i }}</h3>
+      {% for j in to_send[i] %}
+      <p class="w3-text-grey">{{ j }}</p>
+      {% endfor %}
+    {% endfor %}
+    </div>
+    <div id="Leaderboard" class="w3-container menu w3-padding-48 w3-card">
+      <div class="container-fluid">            
+         <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>USERNAME</th>
+                <th>SCORE</th>
+              </tr>
+            </thead>
+            <tbody>
+            {% for i in score_display %}
+              <tr>
+                <td>{{ i }}</td>
+                <td>{{ i.total_score }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+    </div>  
+    <!-- <img src="/w3images/coffeehouse2.jpg" style="width:100%;max-width:1000px;margin-top:32px;"> -->
+  </div>
+</div>
+
+<!-- Contact/Area Container -->
+<div class="w3-container" id="where" style="padding-bottom:32px;">
+  <div class="w3-content" style="max-width:700px">
+    <h3 class="w3-center w3-padding-48"><span class="w3-tag w3-wide">Contact Us</span></h3>
+  <!--   <p>Find us at some address at some place.</p>
+    <div id="googleMap" class="w3-sepia" style="width:100%;height:400px;"></div>
+   --> 
+    <form action="">
+      <p><input class="w3-input w3-padding-16 w3-border" id="feed_name" type="text" placeholder="Name" required name="Name"></p>
+      <p><input class="w3-input w3-padding-16 w3-border" id="feed_email" type="text" placeholder="Email" required></p>
+      <p><input class="w3-input w3-padding-16 w3-border" id="feed_msg" type="text" placeholder="Feedback" required name="Message"></p>
+      <div class="showres"></div>
+      <p><button class="w3-button w3-black msg-send" type="button">SEND MESSAGE</button></p>
+    </form>
+  </div>
+</div>
+
+<!-- End page content -->
+</div>
+
+<!-- Footer -->
+<br><br>
+<div id="footer" style="position:relative;">© 2018 Copyright QZone</footer> 
+
+{% endblock %}
+
+</body>
+</html>

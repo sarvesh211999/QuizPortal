@@ -1,0 +1,202 @@
+{% extends 'base.html' %}
+{% block script %}
+<style type="text/css">
+  span{
+    font-size:30px;
+  }
+</style>
+<script>
+$(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip();
+});
+
+</script>
+  <script type="text/javascript">    
+    $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+
+    $(document).ready(function(){
+        $(document).ready(check);
+
+    function check(){
+      $(".confirmans").click(function(event){
+        var url = $SCRIPT_ROOT + '/check';
+        var selectedId = $(this).attr('id');
+        var selectedValue = [];
+        $.each($("input[name='optradio']:checked"),function(){selectedValue. push($(this).val())});
+        if (selectedValue.length == 0)
+          $('.no-input').html('No Option Selected');
+        else
+        {
+        $.getJSON(url,
+        {id_sent:selectedId,
+        quiz_id_sent:{{ quizid_send }},
+        value:JSON.stringify(selectedValue)
+        },
+        function(data){
+          console.log(data.flag_option2)
+          if (data.flag_option1 == 1)
+          {
+            jQuery('#first').addClass("glyphicon glyphicon-ok").css("color","green");
+          }
+          else if (data.flag_option1 == 2) 
+          {
+           jQuery('#first').addClass("glyphicon glyphicon-remove").css("color","red"); 
+          }
+          if (data.flag_option2 == 1)
+          {
+            jQuery('#second').addClass("glyphicon glyphicon-ok").css("color","green");
+          }
+          else if (data.flag_option2 == 2) 
+          {
+           jQuery('#second').addClass("glyphicon glyphicon-remove").css("color","red"); 
+          }
+          if (data.flag_option3 == 1)
+          {
+            jQuery('#third').addClass("glyphicon glyphicon-ok").css("color","green");
+          }
+          else if (data.flag_option3 == 2) 
+          {
+           jQuery('#third').addClass("glyphicon glyphicon-remove").css("color","red"); 
+          }
+          if (data.flag_option4 == 1)
+          {
+            jQuery('#fourth').addClass("glyphicon glyphicon-ok").css("color","green");
+          }
+          else if (data.flag_option4 == 2) 
+          {
+           jQuery('#fourth').addClass("glyphicon glyphicon-remove").css("color","red"); 
+          }
+          $('input:radio').attr('disabled', 'true');
+          $('input:checkbox').attr('disabled', 'true');
+        }
+        );
+      }});
+    }
+    });
+ function Lifeline_func(t,x,y,z,w){
+  var a = 0;
+  var b;
+  var c;
+  var url = $SCRIPT_ROOT+"/lifeline";
+  $.getJSON(url,
+        {quiz_id_sent:{{ quizid_send }}
+        });
+
+  console.log(x,y,z,w); 
+  if(t == 0){
+      b=2;
+      c = 0;
+      var s ="red";
+      var k = "remove";
+    }
+  else{
+    b=1;
+    c = 1;
+    var s = "green";
+    var k = "ok";
+  }
+  if (x == c) {
+    if (a < b) {
+      console.log(a);
+    jQuery('#first').addClass("glyphicon glyphicon-"+k).css("color",s);
+    a = a+1;}
+  }
+  if (y == c) {
+    if (a < b) {
+      console.log(a);
+    jQuery('#second').addClass("glyphicon glyphicon-"+k).css("color",s);
+    a = a+1;}
+  }
+  if (z == c) {
+    if (a < b) {
+      console.log(a);
+    jQuery('#third').addClass("glyphicon glyphicon-"+k).css("color",s);
+    a = a+1;}
+  }
+  if (w == c) {
+    if (a < b) {
+      console.log(a);
+    jQuery('#fourth').addClass("glyphicon glyphicon-"+k).css("color",s);
+    a = a+1;}
+  }
+    
+ }
+  </script>
+{% endblock script %}
+
+
+	{% block contents %}
+
+<br><br>
+  <div class="container-fluid">
+
+{% for i in problems.items %}
+  <div class="row content">
+
+
+  <div class="col-sm-2 sidenav">
+
+    <h2> Questions </h2>
+
+    <ul class="nav nav-pills nav-stacked"> 
+      {% for k in range(length) %}
+        <li><a href="/quiz/{{ quizid_send }}/{{ k+1 }}"> Problem {{ k+1 }} </a></li>
+      {% endfor %}
+
+    </ul>
+  </div>
+
+
+  <div class="col-sm-10">
+      <div class="row-sm-15">
+        <div class="col-sm-10">
+          <div class="panel panel-default text-left" style="margin-top:20px">
+            <div class="panel-body">
+              <p>{{ i.statement }}</p>     
+            </div>
+          </div>
+        </div>
+      <div class="row-sm-20">
+          <div class="col-sm-10 text-center">
+              <div class="well text-left">
+                <p>{% if i.type_of_ques %}More Than One Correct {% else %} Single Correct {% endif %}</p>
+                <div class="no-input" style="color: red"> </div>
+             			<form action="" method='POST' role="form">
+             			  <div {% if i.type_of_ques %} class="checkbox" {% else %} class="radio" {% endif %} >
+  					         <label><input {% if i.type_of_ques %} type="checkbox" {% else %} type="radio" {% endif %} name="optradio" value="{{ i.option_first }}" >{{ i.option_first }}</label><span id = "first" class="" style="color: ;font-size:30px"></span>
+                    </div>
+  				          <div {% if i.type_of_ques %} class="checkbox" {% else %} class="radio" {% endif %}>
+                      <label><input {% if i.type_of_ques %} type="checkbox" {% else %} type="radio" {% endif %} name="optradio" value="{{ i.option_second }}">{{ i.option_second }}</label>
+                      <span id= "second" class="" style="color: ;font-size:30px"></span>
+  				          </div>
+  				          <div {% if i.type_of_ques %} class="checkbox" {% else %} class="radio" {% endif %}>
+                      <label><input {% if i.type_of_ques %} type="checkbox" {% else %} type="radio" {% endif %} name="optradio" value="{{ i.option_third }}">{{ i.option_third }}</label><span id = "third" class="" style="color: ;font-size:30px"></span>
+  				          </div>
+                    <div {% if i.type_of_ques %} class="checkbox" {% else %} class="radio" {% endif %}>
+                      <label><input {% if i.type_of_ques %} type="checkbox" {% else %} type="radio" {% endif %} name="optradio" value="{{ i.option_fourth }}">{{ i.option_fourth }}</label><span id = "fourth" class="" style="color: ;font-size:30px"></span>
+  				          </div>
+  				        </form>
+              </div>
+              <div><button class = "btn btn-info" id = "lifeline" onclick = "Lifeline_func({{i.type_of_ques|int}},{{ i.answer_first|int}},{{ i.answer_second|int }},{{ i.answer_third|int }},{{i.answer_fourth|int }})" {% if lifeline %} disabled {% endif %} >Lifeline</button></div><br>
+              {% if problems.has_prev %}<a href="{{ url_for('quiz', quizid=quizid_send,page=problems.prev_num) }}" class="btn btn-info" role="button">&laquo; Previous</a>{% endif %} 
+              <button class="confirmans btn btn-success" style="position: relative;" type="submit" id="{{ i.id }}" {% for j in check %} {% if j.problem_id == i.id %} {% if j.attempted %} disabled {% endif %} {% endif %} {% endfor %}>Confirm Answer</button>
+              {% if problems.has_next %}<a href="{{ url_for('quiz', quizid=quizid_send,page=problems.next_num) }}" style="position: relative;" class="btn btn-info" role="button">Next &raquo;</a>{% endif %}
+              <br><br>
+              <a href="{{ url_for('quiz_dashboard') }}" data-toggle="tooltip" title = "Pause Quiz"><button type="button" class="btn btn-warning">Pause Quiz</button></a>
+              <a href="{{ url_for('submit', quizid = quizid_send) }}" data-toggle="tooltip" title="Submit"><button type="button" class="btn btn-primary" {% if attempt[quizid_send][0] ==2 %} disabled {% endif %}> Submit Quiz</button></a>
+              
+
+
+{% endfor %}
+
+          </div>
+      </div>
+    </div>
+</div>
+</div>
+</div>
+
+
+<div id="footer">© 2018 Copyright QZone</footer> 
+
+        {% endblock %}
