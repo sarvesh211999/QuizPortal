@@ -13,7 +13,7 @@ Flask-Testing==0.6.1
 Flask-User==1.0.1.1
 Flask-WTF==0.14.2
 httplib2==0.9.1
-Jinja2==2.10
+Jinja2==2.11.3
 jsonschema==2.6.0
 oauthlib==2.0.7
 rauth==0.7.3
