@@ -23,7 +23,7 @@ simplejson==3.13.2
 SQLAlchemy==1.2.6
 SQLAlchemy-Continuum==1.2.4
 SQLAlchemy-Utils==0.32.11
-urllib3==1.22
+urllib3==1.26.5
 validators==0.12.1
 Werkzeug==0.14.1
 WTForms==2.1
